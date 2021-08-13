@@ -20,4 +20,5 @@ urlpatterns = [
 
 
     path('send/', views.send, name='send'),
+    path('manage/',views.manage_FilePathForm,)
 ]

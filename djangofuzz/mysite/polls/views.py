@@ -1,9 +1,10 @@
 from django.core.mail import send_mail, EmailMessage
+from django.forms import modelformset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
-from .models import Question, Choice
+from .models import Question, Choice, FilePathFieldForm
 
 
 class IndexView(generic.ListView):
@@ -63,3 +64,15 @@ def send(request):
         headers={'Message-ID': 'foo'},
     )
     email.send()
+
+
+# 使用form组件实现注册方式
+def manage_FilePathForm(request):
+    form_obj = FilePathFieldForm()         # 实例化一个对象
+    if request.method == "POST":
+        # 实例化form对象的时候，把post提交过来的数据直接传进去
+        form_obj = FilePathFieldForm(request.POST)
+        # 调用form_obj校验数据的方法
+        if form_obj.is_valid():
+            form_obj.save()
+    return render(request, 'polls/manage_authors.html', {'form_obj': form_obj})
